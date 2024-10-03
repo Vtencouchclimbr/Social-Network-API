@@ -1,20 +1,12 @@
-import { Router } from 'express';
-const router = Router();
-import {
-  getAllReactions,
-  getReactionById,
-  createReaction,
-  deleteReaction,
-  updateReaction,
+// import { Router } from 'express';
+// const router = Router();
+// import {
+//   createReaction,
+//   deleteReaction,
 
-} from '../../controllers/reactionController.js';
+// } from '../../controllers/reactionController.js';
 
-// /api/reactions
-router.route('/').get(getAllReactions).post(createReaction);
+// // /api/reactions
+// router.route('/api/thoughts/:thoughtsId/reactions').post(createReaction).delete(deleteReaction);
 
-// /api/reactions/:reactionId
-router.route('/:reactionId').get(getReactionById)
-                           .put(updateReaction)
-                           .delete(deleteReaction);
-
-export { router as reactionRouter} ;
+// export { router as reactionRouter} ;

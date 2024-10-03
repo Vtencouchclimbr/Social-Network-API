@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types } from 'mongoose';
+import moment from 'moment';
 // Reaction Schema
 const reactionSchema = new Schema({
     reactionId: {
@@ -20,7 +21,9 @@ const reactionSchema = new Schema({
     },
 }, {
     timestamps: true,
+    toJSON: { getters: true },
 });
-// Create the Reaction model
-const Reaction = model('Reaction', reactionSchema);
-export default Reaction;
+reactionSchema.virtual('formattedCreatedAt').get(function () {
+    return moment(this.createdAt).format('MMMM Do YYYY, h:mm:ss a');
+});
+export default reactionSchema;

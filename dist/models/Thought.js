@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import reactionSchema from './Reaction';
 const thoughtSchema = new Schema({
     username: {
         type: String,
@@ -12,12 +13,7 @@ const thoughtSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    reactions: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Reaction',
-        },
-    ],
+    reactions: [reactionSchema],
 }, {
     toJSON: {
         virtuals: true,
