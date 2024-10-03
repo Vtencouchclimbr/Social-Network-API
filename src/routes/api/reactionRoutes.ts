@@ -1,24 +1,20 @@
 import { Router } from 'express';
 const router = Router();
 import {
-  getAllStudents,
-  getStudentById,
-  createStudent,
-  deleteStudent,
-  addAssignment,
-  removeAssignment,
-} from '../../controllers/thoughtController.js';
+  getAllReactions,
+  getReactionById,
+  createReaction,
+  deleteReaction,
+  updateReaction,
 
-// /api/students
-router.route('/').get(getAllStudents).post(createStudent);
+} from '../../controllers/reactionController.js';
 
-// /api/students/:studentId
-router.route('/:studentId').get(getStudentById).delete(deleteStudent);
+// /api/reactions
+router.route('/').get(getAllReactions).post(createReaction);
 
-// /api/students/:studentId/assignments
-router.route('/:studentId/assignments').post(addAssignment);
+// /api/reactions/:reactionId
+router.route('/:reactionId').get(getReactionById)
+                           .put(updateReaction)
+                           .delete(deleteReaction);
 
-// /api/students/:studentId/assignments/:assignmentId
-router.route('/:studentId/assignments/:assignmentId').delete(removeAssignment);
-
-export { router as studentRouter} ;
+export { router as reactionRouter} ;
