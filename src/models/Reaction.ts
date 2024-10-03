@@ -1,69 +1,37 @@
-import { Schema, Types, model, type Document } from 'mongoose';
+import { Schema, model, type Document } from 'mongoose';
 
-interface IAssignment extends Document {
-    assignmentId: Schema.Types.ObjectId,
-    name: string,
-    score: number
+// Define the Reaction interface
+interface IReaction extends Document {
+    reactionId: Schema.Types.ObjectId,
+    reactionBody: string,
+    username: string,
+    createdAt: Date,
 }
 
-interface IStudent extends Document {
-    first: string,
-    last: string,
-    github: string,
-    assignments: Schema.Types.ObjectId[]
-}
-
-const assignmentSchema = new Schema<IAssignment>(
-    {
-        assignmentId: {
-            type: Schema.Types.ObjectId,
-            default: () => new Types.ObjectId(),
-        },
-        name: {
-            type: String,
-            required: true,
-            maxlength: 50,
-            minlength: 4,
-            default: 'Unnamed assignment',
-        },
-        score: {
-            type: Number,
-            required: true,
-            default: () => Math.floor(Math.random() * (100 - 70 + 1) + 70),
-        },
+// Reaction Schema
+const reactionSchema = new Schema<IReaction>({
+    reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Schema.Types.ObjectId(),
     },
-    {
-        timestamps: true,
-        _id: false
-    }
-);
-
-const studentSchema = new Schema<IStudent>({
-    first: {
+    reactionBody: {
         type: String,
         required: true,
-        max_length: 50,
+        maxlength: 280,
     },
-    last: {
+    username: {
         type: String,
         required: true,
-        max_length: 50,
     },
-    github: {
-        type: String,
-        required: true,
-        max_length: 50,
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
-    assignments: [assignmentSchema],
-},
-    {
-        toJSON: {
-            getters: true,
-        },
-        timestamps: true
-    }
-);
+}, {
+    timestamps: true,
+});
 
-const Student = model('Student', studentSchema);
+// Create the Reaction model
+const Reaction = model<IReaction>('Reaction', reactionSchema);
 
-export default Student;
+export default Reaction;

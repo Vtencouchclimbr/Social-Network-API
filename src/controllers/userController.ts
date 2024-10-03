@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { Course, Student } from '../models/index.js';
+import { User } from '../models/index.js';
 
 /**
  * GET All Courses /courses
  * @returns an array of Courses
 */
-export const getAllCourses = async(_req: Request, res: Response) => {
+export const getAllUsers = async(_req: Request, res: Response) => {
     try {
-        const courses = await Course.find();
-        res.json(courses);
+        const users = await User.find();
+        res.json(users);
     } catch(error: any){
         res.status(500).json({
             message: error.message

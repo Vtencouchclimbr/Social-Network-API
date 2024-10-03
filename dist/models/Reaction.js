@@ -1,47 +1,26 @@
-import { Schema, Types, model } from 'mongoose';
-const assignmentSchema = new Schema({
-    assignmentId: {
+import { Schema, model } from 'mongoose';
+// Reaction Schema
+const ReactionSchema = new Schema({
+    reactionId: {
         type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId(),
+        default: () => new Schema.Types.ObjectId(),
     },
-    name: {
+    reactionBody: {
         type: String,
         required: true,
-        maxlength: 50,
-        minlength: 4,
-        default: 'Unnamed assignment',
+        maxlength: 280,
     },
-    score: {
-        type: Number,
+    username: {
+        type: String,
         required: true,
-        default: () => Math.floor(Math.random() * (100 - 70 + 1) + 70),
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 }, {
     timestamps: true,
-    _id: false
 });
-const studentSchema = new Schema({
-    first: {
-        type: String,
-        required: true,
-        max_length: 50,
-    },
-    last: {
-        type: String,
-        required: true,
-        max_length: 50,
-    },
-    github: {
-        type: String,
-        required: true,
-        max_length: 50,
-    },
-    assignments: [assignmentSchema],
-}, {
-    toJSON: {
-        getters: true,
-    },
-    timestamps: true
-});
-const Student = model('Student', studentSchema);
-export default Student;
+// Create the Reaction model
+const Reaction = model('Reaction', ReactionSchema);
+export default Reaction;

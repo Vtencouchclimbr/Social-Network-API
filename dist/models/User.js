@@ -1,26 +1,23 @@
 import { Schema, model } from 'mongoose';
-const courseSchema = new Schema({
-    name: {
+const userSchema = new Schema({
+    username: {
         type: String,
         required: true,
     },
-    inPerson: {
-        type: Boolean,
-        default: true,
+    email: {
+        type: String,
+        required: true,
     },
-    start: {
-        type: Date,
-        default: Date.now(),
-    },
-    end: {
-        type: Date,
-        // Sets a default value of 12 weeks from now
-        default: () => new Date(+new Date() + 84 * 24 * 60 * 60 * 1000),
-    },
-    students: [
+    thoughts: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'student',
+            ref: 'Thought',
+        },
+    ],
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
     ],
 }, {
@@ -29,5 +26,5 @@ const courseSchema = new Schema({
     },
     timestamps: true
 });
-const Course = model('Course', courseSchema);
-export default Course;
+const User = model('User', userSchema);
+export default User;
