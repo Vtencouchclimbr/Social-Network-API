@@ -101,3 +101,34 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
+// Function to add a friend
+export const addFriend = async (req, res) => {
+    const { userId, friendId } = req.body;
+    try {
+        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $addToSet: { friends: friendId } }, { new: true });
+        if (!updatedUser) {
+            res.status(404).json({ message: 'No user with this id!' });
+        }
+        res.json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+export const deleteFriend = async (req, res) => {
+    const { userId, friendId } = req.body;
+    try {
+        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $pull: { friends: friendId } }, { new: true });
+        if (!updatedUser) {
+            res.status(404).json({ message: 'No user with this id!' });
+        }
+        res.json(updatedUser);
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};

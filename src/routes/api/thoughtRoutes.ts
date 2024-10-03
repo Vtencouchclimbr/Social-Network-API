@@ -14,13 +14,13 @@ import {
 // /api/thoughts
 router.route('/').get(getAllThoughts).post(createThought);
 
-// /api/students/:thoughtId
+// /api/thoughts/:thoughtId
 router.route('/:thoughtId').get(getThoughtById)
                            .put(updateThought)
                            .delete(deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
-router.route('/api/thoughts/:thoughtId/reactions').post(createReaction).delete(deleteReaction);
+router.route('/:thoughtId/reactions').post(createReaction).delete(deleteReaction);
 
 
                            

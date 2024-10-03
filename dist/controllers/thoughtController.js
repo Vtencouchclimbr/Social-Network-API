@@ -1,5 +1,4 @@
 import { Thought } from '../models/index.js';
-import { Reaction } from '../models/index.js';
 /**
  * GET All Users /users
  * @returns an array of Users
@@ -91,8 +90,47 @@ export const deleteThought = async (req, res) => {
             });
         }
         else {
-            await Reaction.deleteMany({ _id: { $in: thought.reactions } });
+            await Thought.deleteMany({ _id: { $in: thought.reactions } });
             res.json({ message: 'User and thoughts deleted!' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+/**
+* POST reaction /reactions
+* @param object username
+* @returns a single reaction object
+*/
+export const createReaction = async (req, res) => {
+    const { reaction } = req.body;
+    try {
+        const newReaction = await Thought.create({
+            reaction
+        });
+        res.status(201).json(newReaction);
+    }
+    catch (error) {
+        res.status(400).json({
+            message: error.message
+        });
+    }
+};
+/**
+* DELETE reaction based on id /reactions/:id
+* @param string id
+* @returns string
+*/
+export const deleteReaction = async (req, res) => {
+    try {
+        const reaction = await Thought.findOneAndDelete({ _id: req.params.reactionId });
+        if (!reaction) {
+            res.status(404).json({
+                message: 'No reaction with that ID'
+            });
         }
     }
     catch (error) {

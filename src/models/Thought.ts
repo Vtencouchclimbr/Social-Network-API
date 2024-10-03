@@ -1,5 +1,6 @@
 import { Schema, model, type Document } from 'mongoose';
-import reactionSchema from './Reaction';
+import moment from 'moment';
+import reactionSchema from './Reaction.js';
 
 interface IThought extends Document {
     username: string,
@@ -31,6 +32,10 @@ const thoughtSchema = new Schema<IThought>(
         timestamps: true
     },
 );
+
+thoughtSchema.virtual('formattedCreatedAt').get(function() {
+    return moment(this.createdAt).format('MMMM Do YYYY, h:mm:ss a');
+});
 
 const Thought = model<IThought>('Thought', thoughtSchema);
 

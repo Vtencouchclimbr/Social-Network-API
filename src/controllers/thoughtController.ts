@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { Thought } from '../models/index.js';
-import { Reaction } from '../models/index.js';
-
 
 /**
  * GET All Users /users
@@ -99,7 +97,7 @@ export const deleteThought = async (req: Request, res: Response) => {
           message: 'No user with that ID'
         });
       } else {
-        await Reaction.deleteMany({ _id: { $in: thought.reactions } });
+        await Thought.deleteMany({ _id: { $in: thought.reactions } });
         res.json({ message: 'User and thoughts deleted!' });
       }
       
@@ -118,7 +116,7 @@ export const deleteThought = async (req: Request, res: Response) => {
 export const createReaction = async (req: Request, res: Response) => {
   const { reaction } = req.body;
   try {
-    const newReaction = await Reaction.create({
+    const newReaction = await Thought.create({
       reaction
     });
     res.status(201).json(newReaction);
@@ -136,7 +134,7 @@ export const createReaction = async (req: Request, res: Response) => {
 */
 export const deleteReaction = async (req: Request, res: Response) => {
   try {
-    const reaction = await Reaction.findOneAndDelete({ _id: req.params.reactionId});
+    const reaction = await Thought.findOneAndDelete({ _id: req.params.reactionId});
     
     if(!reaction) {
       res.status(404).json({
