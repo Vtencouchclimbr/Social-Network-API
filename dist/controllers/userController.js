@@ -1,7 +1,8 @@
 import { User } from '../models/index.js';
+import { Thought } from '../models/index.js';
 /**
- * GET All Courses /courses
- * @returns an array of Courses
+ * GET All Users /users
+ * @returns an array of Users
 */
 export const getAllUsers = async (_req, res) => {
     try {
@@ -15,20 +16,20 @@ export const getAllUsers = async (_req, res) => {
     }
 };
 /**
- * GET Course based on id /course/:id
+ * GET Users based on id /users/:id
  * @param string id
- * @returns a single Course object
+ * @returns a single Users object
 */
-export const getCourseById = async (req, res) => {
-    const { courseId } = req.params;
+export const getUserById = async (req, res) => {
+    const { userId } = req.params;
     try {
-        const student = await Course.findById(courseId);
-        if (student) {
-            res.json(student);
+        const user = await User.findById(userId);
+        if (user) {
+            res.json(user);
         }
         else {
             res.status(404).json({
-                message: 'Volunteer not found'
+                message: 'User not found'
             });
         }
     }
@@ -39,17 +40,17 @@ export const getCourseById = async (req, res) => {
     }
 };
 /**
-* POST Course /courses
+* POST Users /users
 * @param object username
-* @returns a single Course object
+* @returns a single Users object
 */
-export const createCourse = async (req, res) => {
-    const { course } = req.body;
+export const createUser = async (req, res) => {
+    const { user } = req.body;
     try {
-        const newCourse = await Course.create({
-            course
+        const newUser = await User.create({
+            user
         });
-        res.status(201).json(newCourse);
+        res.status(201).json(newUser);
     }
     catch (error) {
         res.status(400).json({
@@ -58,17 +59,17 @@ export const createCourse = async (req, res) => {
     }
 };
 /**
- * PUT Course based on id /courses/:id
+ * PUT Users based on id /users/:id
  * @param object id, username
- * @returns a single Course object
+ * @returns a single Users object
 */
-export const updateCourse = async (req, res) => {
+export const updateUser = async (req, res) => {
     try {
-        const course = await Course.findOneAndUpdate({ _id: req.params.courseId }, { $set: req.body }, { runValidators: true, new: true });
-        if (!course) {
-            res.status(404).json({ message: 'No course with this id!' });
+        const user = await User.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { runValidators: true, new: true });
+        if (!user) {
+            res.status(404).json({ message: 'No user with this id!' });
         }
-        res.json(course);
+        res.json(user);
     }
     catch (error) {
         res.status(400).json({
@@ -77,21 +78,21 @@ export const updateCourse = async (req, res) => {
     }
 };
 /**
-* DELETE Course based on id /courses/:id
+* DELETE Users based on id /users/:id
 * @param string id
 * @returns string
 */
-export const deleteCourse = async (req, res) => {
+export const deleteUser = async (req, res) => {
     try {
-        const course = await Course.findOneAndDelete({ _id: req.params.courseId });
-        if (!course) {
+        const user = await User.findOneAndDelete({ _id: req.params.userId });
+        if (!user) {
             res.status(404).json({
-                message: 'No course with that ID'
+                message: 'No user with that ID'
             });
         }
         else {
-            await Student.deleteMany({ _id: { $in: course.students } });
-            res.json({ message: 'Course and students deleted!' });
+            await Thought.deleteMany({ _id: { $in: user.thoughts } });
+            res.json({ message: 'User and thoughts deleted!' });
         }
     }
     catch (error) {

@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 // Reaction Schema
-const ReactionSchema = new Schema({
+const reactionSchema = new Schema({
     reactionId: {
         type: Schema.Types.ObjectId,
-        default: () => new Schema.Types.ObjectId(),
+        default: () => new Types.ObjectId(),
     },
     reactionBody: {
         type: String,
@@ -22,5 +22,5 @@ const ReactionSchema = new Schema({
     timestamps: true,
 });
 // Create the Reaction model
-const Reaction = model('Reaction', ReactionSchema);
+const Reaction = model('Reaction', reactionSchema);
 export default Reaction;

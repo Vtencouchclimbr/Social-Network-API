@@ -1,12 +1,12 @@
 import { Router } from 'express';
 const router = Router();
-import { getAllCourses, getCourseById, createCourse, updateCourse, deleteCourse, } from '../../controllers/userController.js';
-// /api/courses
-router.route('/').get(getAllCourses).post(createCourse);
-// /api/courses/:courseId
+import { getAllUsers, getUserById, createUser, updateUser, deleteUser, } from '../../controllers/userController.js';
+// /api/users
+router.route('/').get(getAllUsers).post(createUser);
+// /api/users/:userId
 router
-    .route('/:courseId')
-    .get(getCourseById)
-    .put(updateCourse)
-    .delete(deleteCourse);
-export { router as courseRouter };
+    .route('/:userId')
+    .get(getUserById)
+    .put(updateUser)
+    .delete(deleteUser);
+export { router as userRouter };

@@ -1,8 +1,9 @@
-import { Schema, model, type Document } from 'mongoose';
+import { Schema, Types, Document } from 'mongoose';
+import moment from 'moment';
 
 // Define the Reaction interface
 interface IReaction extends Document {
-    reactionId: Schema.Types.ObjectId,
+    reactionId: Types.ObjectId,
     reactionBody: string,
     username: string,
     createdAt: Date,
@@ -12,7 +13,7 @@ interface IReaction extends Document {
 const reactionSchema = new Schema<IReaction>({
     reactionId: {
         type: Schema.Types.ObjectId,
-        default: () => new Schema.Types.ObjectId(),
+        default: () => new Types.ObjectId(),
     },
     reactionBody: {
         type: String,
@@ -29,9 +30,11 @@ const reactionSchema = new Schema<IReaction>({
     },
 }, {
     timestamps: true,
+    toJSON: { getters: true},
 });
 
-// Create the Reaction model
-const Reaction = model<IReaction>('Reaction', reactionSchema);
+reactionSchema.virtual('formattedCreatedAt').get(function() {
+    return moment(this.createdAt).format('MMMM Do YYYY, h:mm:ss a');
+});
 
-export default Reaction;
+export default reactionSchema;

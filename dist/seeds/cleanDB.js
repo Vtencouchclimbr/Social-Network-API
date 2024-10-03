@@ -1,9 +1,11 @@
-import { Course, Student } from '../models/index.js';
+import { User, Thought, Reaction } from '../models/index.js';
 const cleanDB = async () => {
     try {
-        await Course.deleteMany({});
+        await User.deleteMany({});
         console.log('Course collection cleaned.');
-        await Student.deleteMany({});
+        await Thought.deleteMany({});
+        console.log('Student collection cleaned.');
+        await Reaction.deleteMany({});
         console.log('Student collection cleaned.');
     }
     catch (err) {

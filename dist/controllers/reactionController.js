@@ -1,12 +1,12 @@
-import { Course, Student } from '../models/index.js';
+import { Reaction } from '../models/index.js';
 /**
- * GET All Courses /courses
- * @returns an array of Courses
+ * GET All reactions /reactions
+ * @returns an array of reactions
 */
-export const getAllCourses = async (_req, res) => {
+export const getAllReactions = async (_req, res) => {
     try {
-        const courses = await Course.find();
-        res.json(courses);
+        const reactions = await Reaction.find();
+        res.json(reactions);
     }
     catch (error) {
         res.status(500).json({
@@ -15,20 +15,20 @@ export const getAllCourses = async (_req, res) => {
     }
 };
 /**
- * GET Course based on id /course/:id
+ * GET reaction based on id /reaction/:id
  * @param string id
- * @returns a single Course object
+ * @returns a single reaction object
 */
-export const getCourseById = async (req, res) => {
-    const { courseId } = req.params;
+export const getReactionById = async (req, res) => {
+    const { reactionId } = req.params;
     try {
-        const student = await Course.findById(courseId);
-        if (student) {
-            res.json(student);
+        const reaction = await Reaction.findById(reactionId);
+        if (reaction) {
+            res.json(reaction);
         }
         else {
             res.status(404).json({
-                message: 'Volunteer not found'
+                message: 'Reaction not found'
             });
         }
     }
@@ -39,17 +39,17 @@ export const getCourseById = async (req, res) => {
     }
 };
 /**
-* POST Course /courses
+* POST reaction /reactions
 * @param object username
-* @returns a single Course object
+* @returns a single reaction object
 */
-export const createCourse = async (req, res) => {
-    const { course } = req.body;
+export const createReaction = async (req, res) => {
+    const { reaction } = req.body;
     try {
-        const newCourse = await Course.create({
-            course
+        const newReaction = await Reaction.create({
+            reaction
         });
-        res.status(201).json(newCourse);
+        res.status(201).json(newReaction);
     }
     catch (error) {
         res.status(400).json({
@@ -58,17 +58,17 @@ export const createCourse = async (req, res) => {
     }
 };
 /**
- * PUT Course based on id /courses/:id
+ * PUT reaction based on id /reactions/:id
  * @param object id, username
- * @returns a single Course object
+ * @returns a single reaction object
 */
-export const updateCourse = async (req, res) => {
+export const updateReaction = async (req, res) => {
     try {
-        const course = await Course.findOneAndUpdate({ _id: req.params.courseId }, { $set: req.body }, { runValidators: true, new: true });
-        if (!course) {
-            res.status(404).json({ message: 'No course with this id!' });
+        const reaction = await Reaction.findOneAndUpdate({ _id: req.params.reactionId }, { $set: req.body }, { runValidators: true, new: true });
+        if (!reaction) {
+            res.status(404).json({ message: 'No reaction with this id!' });
         }
-        res.json(course);
+        res.json(reaction);
     }
     catch (error) {
         res.status(400).json({
@@ -77,21 +77,17 @@ export const updateCourse = async (req, res) => {
     }
 };
 /**
-* DELETE Course based on id /courses/:id
+* DELETE reaction based on id /reactions/:id
 * @param string id
 * @returns string
 */
-export const deleteCourse = async (req, res) => {
+export const deleteReaction = async (req, res) => {
     try {
-        const course = await Course.findOneAndDelete({ _id: req.params.courseId });
-        if (!course) {
+        const reaction = await Reaction.findOneAndDelete({ _id: req.params.reactionId });
+        if (!reaction) {
             res.status(404).json({
-                message: 'No course with that ID'
+                message: 'No reaction with that ID'
             });
-        }
-        else {
-            await Student.deleteMany({ _id: { $in: course.students } });
-            res.json({ message: 'Course and students deleted!' });
         }
     }
     catch (error) {
