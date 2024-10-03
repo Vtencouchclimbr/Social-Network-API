@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { Course, Student } from '../models/index.js';
+import { Reaction } from '../models/index.js';
 
 /**
- * GET All Courses /courses
- * @returns an array of Courses
+ * GET All reactions /reactions
+ * @returns an array of reactions
 */
-export const getAllCourses = async(_req: Request, res: Response) => {
+export const getAllReactions = async(_req: Request, res: Response) => {
     try {
-        const courses = await Course.find();
-        res.json(courses);
+        const reactions = await Reaction.find();
+        res.json(reactions);
     } catch(error: any){
         res.status(500).json({
             message: error.message
@@ -17,19 +17,19 @@ export const getAllCourses = async(_req: Request, res: Response) => {
 }
 
 /**
- * GET Course based on id /course/:id
+ * GET reaction based on id /reaction/:id
  * @param string id
- * @returns a single Course object
+ * @returns a single reaction object
 */
-export const getCourseById = async (req: Request, res: Response) => {
-    const { courseId } = req.params;
+export const getReactionById = async (req: Request, res: Response) => {
+    const { reactionId } = req.params;
     try {
-      const student = await Course.findById(courseId);
-      if(student) {
-        res.json(student);
+      const reaction = await Reaction.findById(reactionId);
+      if(reaction) {
+        res.json(reaction);
       } else {
         res.status(404).json({
-          message: 'Volunteer not found'
+          message: 'Reaction not found'
         });
       }
     } catch (error: any) {
@@ -40,17 +40,17 @@ export const getCourseById = async (req: Request, res: Response) => {
   };
 
   /**
- * POST Course /courses
+ * POST reaction /reactions
  * @param object username
- * @returns a single Course object
+ * @returns a single reaction object
 */
-export const createCourse = async (req: Request, res: Response) => {
-    const { course } = req.body;
+export const createReaction = async (req: Request, res: Response) => {
+    const { reaction } = req.body;
     try {
-      const newCourse = await Course.create({
-        course
+      const newReaction = await Reaction.create({
+        reaction
       });
-      res.status(201).json(newCourse);
+      res.status(201).json(newReaction);
     } catch (error: any) {
       res.status(400).json({
         message: error.message
@@ -59,23 +59,23 @@ export const createCourse = async (req: Request, res: Response) => {
   };
 
 /**
- * PUT Course based on id /courses/:id
+ * PUT reaction based on id /reactions/:id
  * @param object id, username
- * @returns a single Course object
+ * @returns a single reaction object
 */
-export const updateCourse = async (req: Request, res: Response) => {
+export const updateReaction = async (req: Request, res: Response) => {
     try {
-      const course = await Course.findOneAndUpdate(
-        { _id: req.params.courseId },
+      const reaction = await Reaction.findOneAndUpdate(
+        { _id: req.params.reactionId },
         { $set: req.body },
         { runValidators: true, new: true }
       );
 
-      if (!course) {
-        res.status(404).json({ message: 'No course with this id!' });
+      if (!reaction) {
+        res.status(404).json({ message: 'No reaction with this id!' });
       }
 
-      res.json(course)
+      res.json(reaction)
     } catch (error: any) {
       res.status(400).json({
         message: error.message
@@ -84,21 +84,18 @@ export const updateCourse = async (req: Request, res: Response) => {
   };
 
   /**
- * DELETE Course based on id /courses/:id
+ * DELETE reaction based on id /reactions/:id
  * @param string id
  * @returns string 
 */
-export const deleteCourse = async (req: Request, res: Response) => {
+export const deleteReaction = async (req: Request, res: Response) => {
     try {
-      const course = await Course.findOneAndDelete({ _id: req.params.courseId});
+      const reaction = await Reaction.findOneAndDelete({ _id: req.params.reactionId});
       
-      if(!course) {
+      if(!reaction) {
         res.status(404).json({
-          message: 'No course with that ID'
+          message: 'No reaction with that ID'
         });
-      } else {
-        await Student.deleteMany({ _id: { $in: course.students } });
-        res.json({ message: 'Course and students deleted!' });
       }
       
     } catch (error: any) {
