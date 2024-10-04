@@ -66,7 +66,7 @@ export const createThought = async (req: Request, res: Response) => {
 export const updateThought = async (req: Request, res: Response) => {
     try {
       const thought = await Thought.findOneAndUpdate(
-        { _id: req.params.thoughtId },
+        { _id: req.params.ObjectId },
         { $set: req.body },
         { runValidators: true, new: true }
       );
