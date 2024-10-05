@@ -101,46 +101,23 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
-// Function to add a friend
-// export const addFriend = async (req: Request, res: Response) => {
-//   const { userId, friendId } = req.body;
-//   try {
-//     const updatedUser = await User.findOneAndUpdate(
-//       { _id: userId },
-//       { $addToSet: { friends: friendId } },
-//       { new: true }
-//     );
-//     if (!updatedUser) {
-//       res.status(404).json({ message: 'No user with this id!' });
-//     }
-//     res.json(updatedUser);
-//   }
-//   catch (error: any) {
-//     res.status(500).json({
-//       message: error.message
-//     });
-//   }
-// };
-export const addFriend = async (req, _res) => {
+export const addFriend = async (req, res) => {
+    const { userId, friendId } = req.params;
     try {
-        const { userId, friendId } = req.body;
-        // Find the user by their ID
-        const user = await User.findById(userId);
-        if (!user) {
-            throw new Error('User not found');
+        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $addToSet: { friends: friendId } }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        // Add the friend's ObjectId to the user's friends array
-        user.friends.push(friendId); // Path to friends array
-        // Save the updated user document
-        await user.save();
         console.log(`Friend with ID ${friendId} added to user ${userId}`);
+        return res.status(200).json(updatedUser);
     }
     catch (error) {
         console.error('Error adding friend:', error);
+        return res.status(500).json({ message: 'Error adding friend', error: error.message });
     }
 };
 export const deleteFriend = async (req, res) => {
-    const { userId, friendId } = req.body;
+    const { userId, friendId } = req.params;
     try {
         const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $pull: { friends: friendId } }, { new: true });
         if (!updatedUser) {
@@ -156,7 +133,7 @@ export const deleteFriend = async (req, res) => {
 };
 export const getAllFriends = async (req, res) => {
     try {
-        const friends = await User.findOne({ username: req.params.username }, 'friends');
+        const friends = await User.findOne({ id: req.params.id }, 'friends');
         res.json(friends);
         if (!friends) {
             res.status(404).json({ message: 'No friends found!' });
