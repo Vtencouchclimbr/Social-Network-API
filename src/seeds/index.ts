@@ -11,13 +11,6 @@ try {
   const userData = await User.create(users);
   const thoughtData = await Thought.create(thoughts);
 
-//   // Add courses to the collection and await the results
-//   await Thought.create({
-//     name: 'UCLA',
-//     inPerson: false,
-//     students: [...userData.map(({ _id }: { [key: string]: any }) => _id)],
-//   });
-
   // Log out the seed data to indicate what should appear in the database
   console.table(userData);
   console.table(thoughtData);

@@ -102,19 +102,41 @@ export const deleteUser = async (req, res) => {
     }
 };
 // Function to add a friend
-export const addFriend = async (req, res) => {
-    const { userId, friendId } = req.body;
+// export const addFriend = async (req: Request, res: Response) => {
+//   const { userId, friendId } = req.body;
+//   try {
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: userId },
+//       { $addToSet: { friends: friendId } },
+//       { new: true }
+//     );
+//     if (!updatedUser) {
+//       res.status(404).json({ message: 'No user with this id!' });
+//     }
+//     res.json(updatedUser);
+//   }
+//   catch (error: any) {
+//     res.status(500).json({
+//       message: error.message
+//     });
+//   }
+// };
+export const addFriend = async (req, _res) => {
     try {
-        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $addToSet: { friends: friendId } }, { new: true });
-        if (!updatedUser) {
-            res.status(404).json({ message: 'No user with this id!' });
+        const { userId, friendId } = req.body;
+        // Find the user by their ID
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
         }
-        res.json(updatedUser);
+        // Add the friend's ObjectId to the user's friends array
+        user.friends.push(friendId); // Path to friends array
+        // Save the updated user document
+        await user.save();
+        console.log(`Friend with ID ${friendId} added to user ${userId}`);
     }
     catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        console.error('Error adding friend:', error);
     }
 };
 export const deleteFriend = async (req, res) => {
