@@ -149,16 +149,48 @@ export const createReaction = async (req: Request, res: Response) => {
   }
 }
 
+/**
+* DELETE reaction based on id /reactions/:id
+* @param string id
+* @returns string 
+*/
+// export const deleteReaction = async (req: Request, res: Response) => {
+//   try {
+//     const reaction = await Thought.findOneAndDelete({ _id: req.params.reactionId});
+    
+//     if(!reaction) {
+//       res.status(404).json({
+//         message: 'No reaction with that ID'
+//       });
+//     }
+    
+//   } catch (error: any) {
+//     res.status(500).json({
+//       message: error.message
+//     });
+//   }
+// };
 
 
+export const deleteReaction = async (req: Request, res: Response) => {
+  try {
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    );
 
-
-
-
-
-
-
-
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with this id!' });
+    }
+    
+    res.json(thought);
+    return;
+  } catch (err) {
+    res.status(500).json(err);
+    return;
+  }
+}
 
 
 
@@ -171,23 +203,21 @@ export const createReaction = async (req: Request, res: Response) => {
 
 
 /**
-* DELETE reaction based on id /reactions/:id
+* GetAll reactions based on id /thoughts/:thoughtId/reactions/
 * @param string id
 * @returns string 
 */
-export const deleteReaction = async (req: Request, res: Response) => {
+export const getReactions = async (req: Request, res: Response) => {
   try {
-    const reaction = await Thought.findOneAndDelete({ _id: req.params.reactionId});
-    
-    if(!reaction) {
-      res.status(404).json({
-        message: 'No reaction with that ID'
-      });
+    const thought = await Thought.findById(req.params.thoughtId);
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with this id!' });
     }
-    
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message
-    });
+
+    res.json(thought.reactions);
+    return;
+  } catch (err) {
+    res.status(500).json(err);
+    return;
   }
-};
+}

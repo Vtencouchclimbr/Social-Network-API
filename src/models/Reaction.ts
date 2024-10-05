@@ -1,9 +1,8 @@
-import { Schema, Types, Document } from 'mongoose';
+import { Schema, Document } from 'mongoose';
 import moment from 'moment';
 
 // Define the Reaction interface
 interface IReaction extends Document {
-    reactionId: Types.ObjectId,
     reactionBody: string,
     username: string,
     createdAt: Date,
@@ -11,10 +10,6 @@ interface IReaction extends Document {
 
 // Reaction Schema
 const reactionSchema = new Schema<IReaction>({
-    reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId(),
-    },
     reactionBody: {
         type: String,
         required: true,
