@@ -1,10 +1,14 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import moment from 'moment';
 import reactionSchema from './Reaction.js';
 const thoughtSchema = new Schema({
     username: {
         type: String,
         required: true,
+    },
+    thoughtId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId(),
     },
     thoughtText: {
         type: String,

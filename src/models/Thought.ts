@@ -1,9 +1,10 @@
-import { Schema, model, type Document } from 'mongoose';
+import { Schema, model, Types,  type Document } from 'mongoose';
 import moment from 'moment';
 import reactionSchema from './Reaction.js';
 
 interface IThought extends Document {
     username: string,
+    thoughtId: Schema.Types.ObjectId,
     thoughtText: string,
     createdAt: Date,
     reactions: Schema.Types.ObjectId[],
@@ -14,6 +15,10 @@ const thoughtSchema = new Schema<IThought>(
         username: {
             type: String,
             required: true,
+        },
+        thoughtId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
         },
         thoughtText: {
             type: String,

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { Thought } from '../models/index.js';
 
 /**
- * GET All Users /users
- * @returns an array of Users
+ * GET All Thoughts /thoughts
+ * @returns an array of thoughts
 */
 export const getAllThoughts = async(_req: Request, res: Response) => {
     try {
@@ -40,9 +40,9 @@ export const getThoughtById = async (req: Request, res: Response) => {
   };
 
   /**
- * POST Users /users
- * @param object username
- * @returns a single Users object
+ * POST thoughts /thoughts
+ * @param object thought
+ * @returns a single thoughts object
 */
 export const createThought = async (req: Request, res: Response) => {
     const { thoughtText } = req.body;
@@ -60,14 +60,14 @@ export const createThought = async (req: Request, res: Response) => {
   };
 
 /**
- * PUT Users based on id /users/:id
+ * PUT thoughts based on id /thoughts/:id
  * @param object id, username
- * @returns a single Users object
+ * @returns a single thoughts object
 */
 export const updateThought = async (req: Request, res: Response) => {
     try {
       const thought = await Thought.findOneAndUpdate(
-        { _id: req.params.userId },
+        { _id: req.params.thoughtId },
         { $set: req.body },
         { runValidators: true, new: true }
       );
@@ -85,13 +85,13 @@ export const updateThought = async (req: Request, res: Response) => {
   };
 
   /**
- * DELETE Users based on id /users/:id
+ * DELETE thoughts based on id /thoughts/:id
  * @param string id
  * @returns string 
 */
 export const deleteThought = async (req: Request, res: Response) => {
     try {
-      const thought = await Thought.findOneAndDelete({ _id: req.params.userId});
+      const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId});
       
       if(!thought) {
         res.status(404).json({
@@ -114,19 +114,61 @@ export const deleteThought = async (req: Request, res: Response) => {
  * @param object username
  * @returns a single reaction object
 */
+// export const createReaction = async (req: Request, res: Response) => {
+//   const { reaction } = req.body;
+//   try {
+//     const newReaction = await Thought.create({
+//       reaction
+//     });
+//     res.status(201).json(newReaction);
+//   } catch (error: any) {
+//     res.status(400).json({
+//       message: error.message
+//     });
+//   }
+// };
+
+
 export const createReaction = async (req: Request, res: Response) => {
-  const { reaction } = req.body;
   try {
-    const newReaction = await Thought.create({
-      reaction
-    });
-    res.status(201).json(newReaction);
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message
-    });
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
+    );
+
+    if (!thought) {
+      return res.status(404).json({ message: 'No thought with this id!' });
+    }
+
+    res.json(thought);
+    return;
+  } catch (err) {
+    res.status(500).json(err);
+    return;
   }
-};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
 * DELETE reaction based on id /reactions/:id
