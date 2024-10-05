@@ -15,9 +15,9 @@ export const getAllThoughts = async (_req, res) => {
     }
 };
 /**
- * GET Users based on id /users/:id
+ * GET Thoughts based on id /thoughts/:id
  * @param string id
- * @returns a single Users object
+ * @returns a single thoughts object
 */
 export const getThoughtById = async (req, res) => {
     const { thoughtId } = req.params;
@@ -44,10 +44,10 @@ export const getThoughtById = async (req, res) => {
 * @returns a single Users object
 */
 export const createThought = async (req, res) => {
-    const { thought } = req.body;
+    const { thoughtText } = req.body;
     try {
         const newThought = await Thought.create({
-            thought
+            thoughtText
         });
         res.status(201).json(newThought);
     }
@@ -64,7 +64,7 @@ export const createThought = async (req, res) => {
 */
 export const updateThought = async (req, res) => {
     try {
-        const thought = await Thought.findOneAndUpdate({ _id: req.params.ObjectId }, { $set: req.body }, { runValidators: true, new: true });
+        const thought = await Thought.findOneAndUpdate({ _id: req.params.userId }, { $set: req.body }, { runValidators: true, new: true });
         if (!thought) {
             res.status(404).json({ message: 'No thought with this id!' });
         }

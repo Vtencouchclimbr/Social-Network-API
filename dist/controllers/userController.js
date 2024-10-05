@@ -132,3 +132,17 @@ export const deleteFriend = async (req, res) => {
         });
     }
 };
+export const getAllFriends = async (req, res) => {
+    try {
+        const friends = await User.findOne({ username: req.params.username }, 'friends');
+        res.json(friends);
+        if (!friends) {
+            res.status(404).json({ message: 'No friends found!' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
