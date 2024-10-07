@@ -45,12 +45,11 @@ export const getThoughtById = async (req: Request, res: Response) => {
  * @returns a single thoughts object
 */
 export const createThought = async (req: Request, res: Response) => {
-    const { thoughtText } = req.body;
+    const { thoughtText, username } = req.body;
     try {
       const newThought = await Thought.create({
-        thoughtText
+        thoughtText, username
       });
-      
       res.status(201).json(newThought);
     } catch (error: any) {
       res.status(400).json({

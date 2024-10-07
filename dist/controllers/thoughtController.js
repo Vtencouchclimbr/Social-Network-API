@@ -44,10 +44,10 @@ export const getThoughtById = async (req, res) => {
 * @returns a single thoughts object
 */
 export const createThought = async (req, res) => {
-    const { thoughtText } = req.body;
+    const { thoughtText, username } = req.body;
     try {
         const newThought = await Thought.create({
-            thoughtText
+            thoughtText, username
         });
         res.status(201).json(newThought);
     }
