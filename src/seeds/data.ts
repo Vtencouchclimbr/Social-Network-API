@@ -1,3 +1,4 @@
+// Seeding user and thought data
 const users = [
     {
         username: 'john_doe',

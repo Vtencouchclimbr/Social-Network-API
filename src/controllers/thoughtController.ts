@@ -83,7 +83,7 @@ export const updateThought = async (req: Request, res: Response) => {
     }
   };
 
-  /**
+/**
  * DELETE thoughts based on id /thoughts/:id
  * @param string id
  * @returns string 
@@ -91,7 +91,6 @@ export const updateThought = async (req: Request, res: Response) => {
 export const deleteThought = async (req: Request, res: Response) => {
     try {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId});
-      
       if(!thought) {
         res.status(404).json({
           message: 'No user with that ID'
@@ -100,7 +99,6 @@ export const deleteThought = async (req: Request, res: Response) => {
         await Thought.deleteMany({ _id: { $in: thought.reactions } });
         res.json({ message: 'User and thoughts deleted!' });
       }
-      
     } catch (error: any) {
       res.status(500).json({
         message: error.message
@@ -108,10 +106,10 @@ export const deleteThought = async (req: Request, res: Response) => {
     }
   };
 
-    /**
- * POST reaction /reactions
- * @param object username
- * @returns a single reaction object
+/**
+ * POST reaction based on id /thoughts/:id
+ * @param object Thought
+ * @returns a single thought object
 */
 export const createReaction = async (req: Request, res: Response) => {
   try {
@@ -120,11 +118,9 @@ export const createReaction = async (req: Request, res: Response) => {
       { $addToSet: { reactions: req.body } },
       { runValidators: true, new: true }
     );
-
     if (!thought) {
       return res.status(404).json({ message: 'No thought with this id!' });
     }
-
     res.json(thought);
     return;
   } catch (err) {
@@ -136,7 +132,7 @@ export const createReaction = async (req: Request, res: Response) => {
 /**
 * DELETE reaction based on id /reactions/:id
 * @param string id
-* @returns string 
+* @returns a single thought object 
 */
 export const deleteReaction = async (req: Request, res: Response) => {
   try {
@@ -160,9 +156,9 @@ export const deleteReaction = async (req: Request, res: Response) => {
 }
 
 /**
-* GetAll reactions based on id /thoughts/:thoughtId/reactions/
+* GET all reactions based on id /thoughts/:thoughtId/reactions/
 * @param string id
-* @returns string 
+* @returns an array of reactions 
 */
 export const getReactions = async (req: Request, res: Response) => {
   try {

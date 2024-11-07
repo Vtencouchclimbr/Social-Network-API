@@ -1,5 +1,6 @@
 import { Schema, model, type Document } from 'mongoose';
 
+// Define the IUser interface to describe the structure of a User document
 export interface IUser extends Document {
     username: string,
     email: string,
@@ -7,25 +8,25 @@ export interface IUser extends Document {
     friends: Schema.Types.ObjectId[]
  
 }
-
+// Define the schema for the User model
 const userSchema = new Schema<IUser>(
     {
         username: {
             type: String,
-            unique: true,   
-            required: true, 
-            trim: true, 
+            unique: true,   // Enforce unique usernames
+            required: true, // Make it a required field
+            trim: true,     // Remove whitespace around the username
         },
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Thought',
+                ref: 'Thought', // Reference to Thought documents
             },
         ],
         friends: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'User',
+                ref: 'User', // Reference to User documents
             },
         ],
         email: {
@@ -34,7 +35,7 @@ const userSchema = new Schema<IUser>(
             unique: true,   // Ensure the email is unique
             validate: {
                 validator: function(v: string) {
-                    // Regular expression for validating email format
+                    // Validating email format
                     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
                 },
                 message: props => `${props.value} is not a valid email!`, // Error message if validation fails
@@ -43,12 +44,13 @@ const userSchema = new Schema<IUser>(
     },
     {
         toJSON: {
-            virtuals: true,
+            virtuals: true, // Include virtual properties when converting to JSON
         },
-        timestamps: true
+        timestamps: true // Automatically add createdAt and updatedAt fields
     },
 );
 
+// Create and export the User model based on the schema
 const User = model<IUser>('User', userSchema);
 
 export default User;
